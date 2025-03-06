@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Other Page{% endblock %}
+
+{% block content %}
+<h1>Jinja Filters</h1>
+<p>{{ some_text }}</p>
+<p>{{ some_text|lower }}</p>
+<p>{{ some_text|upper }}</p>
+<p>{{ some_text|reverse }}</p>
+<p>{{ some_text|reverse|upper }}</p>
+<p>{{ some_text|reverse|upper|lower }}</p>
+<p>{{ some_text|replace("h", "b") }}</p>
+<p>{{ some_text|reverse_filter }}</p> 
+<p>{{ some_text|repeat_filter }} </p>
+{% endblock %}

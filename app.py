@@ -1,48 +1,31 @@
-# .\.venv\Scripts\Activate.ps1
-
-from flask import Flask, request, make_response
+from flask import Flask, request, make_response, render_template
 
 
 
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='templates')
 
 
 @app.route('/')
 def index():
-    return "Hello, World!"
+    myvalue = "NeuralNine"
+    myresauls = 10 + 20
+    mylist = [1, 3, 3, 5, 6]
 
+    return render_template('index.html', myvalue=myvalue, myresauls=myresauls, mylist=mylist)
 
-@app.route("/hello", methods=['GET'])
-def hello():
-    response = make_response('Hello obs')
-    response.status_code = 202
-    response.headers['Content-Type'] = 'application/json'
-    return response
+@app.route('/other')
+def other():
+    some_text = "hello text"
+    return render_template('other.html', some_text=some_text)
 
+@app.template_filter('reverse_filter')
+def reverse_filter(s):
+    return s[::-1]
 
-
-@app.route('/greet/<name>')
-def greet(name):
-    return f"Hello, {name}!"
-
-
-@app.route('/handle_url_params')
-def handle_params():
-
-    if 'greeting' in request.args.keys() and 'name' in request.args.keys():
-        greeting = request.args.get('greeting', 'Hello')
-        name = request.args.get('name', 'World')
-        return f"{greeting}, {name}!"
-    else:
-        return "No greeting or name provided"
-
-
-
-
-@app.route('/add/<int:number1>/<int:number2>')
-def add(number1, number2):
-    return f"The sum of {number1} and {number2} is {(number1) + (number2)}"
+@app.template_filter('repeat_filter')
+def repeat_filter(s, times=2):
+    return s * times
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5555, debug=True)

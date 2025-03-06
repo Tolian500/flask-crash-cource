@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Index Page{% endblock %}
+
+{% block content %}
+    <h1>Hello, World!</h1>
+    <p>My value is {{ myvalue }}</p>
+    <p>My result is {{ myresult }}</p>
+    <p>My list is {{ mylist }}</p>
+    <ul>
+        {% for item in mylist%}
+            {% if item == 3 %}
+            <li>Three</li>
+            {% elif item == 5 %}
+                <li>Five</li>
+            {% else %}
+            pass
+        <li>{{ item }}</li>
+        {% endif %}
+        {% endfor %}
+    </ul>
+{% endblock %}

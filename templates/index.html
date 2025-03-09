@@ -1,18 +1,26 @@
 {% extends "base.html" %}
 
-{% block title %}Index Page{% endblock %}
+{% block title %} Index Page {% endblock %}
 
 {% block content %}
-<h1>Hello, World!</h1>
-<p> {{ message }}</p>
+<h1>Index page</h1>
 
-<a href="{{ url_for('set_data')}}">Set session data</a><br>
-<a href="{{ url_for('get_data')}}">Get session data</a><br>
-<a href="{{ url_for('clear_session')}}">Clear session data</a><br>
+    <ul>
+    {% for person in people %}
+        <li>
+            {{ person }}
+        </li>
+    {% endfor %}
 
+    </ul>
 
-<a href="{{ url_for('set_cookie')}}">Set cookie data</a><br>
-<a href="{{ url_for('get_cookie')}}">Get cookie data</a><br>
-<a href="{{ url_for('remove_cookie')}}">Remove cookie data</a><br>
+    <h3>New person</h3>
+
+    <form action="{{ url_for('index') }}" method="POST">
+        <input type="text" name="name" placeholder="name" required="required"><br>
+        <input type="number" name="age" placeholder="age"><br>
+        <input type="text" name="job" placeholder="job"><br>
+        <input type="submit" value="Create">
+    </form>
 
 {% endblock %}

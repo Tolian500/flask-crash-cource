@@ -1,4 +1,5 @@
-from flask import Flask, request, make_response, render_template, Response, send_from_directory, jsonify, session
+from flask import Flask, request, make_response, render_template, Response, send_from_directory, jsonify, session, flash
+
 import pandas as pd
 import os
 import uuid
@@ -52,5 +53,22 @@ def remove_cookie():
     response.set_cookie('cookie_name', expires=0)
     return response
 
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'GET':
+    
+        return render_template('login.html')
+    elif request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        if username == 'admin' and password == 'admin':
+            flash('Sucessfull login!')
+            return render_template('index.html', message = '')
+        else: 
+            flash('Login failed!')
+            return render_template('index.html', message = '')
+        
+        
 if __name__ == '__main__':  
     app.run(host="0.0.0.0", port=5555, debug=True)

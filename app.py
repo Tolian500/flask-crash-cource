@@ -1,4 +1,4 @@
-from flask import Flask, request, make_response, render_template, Response, send_from_directory
+from flask import Flask, request, make_response, render_template, Response, send_from_directory, jsonify
 import pandas as pd
 import os
 import uuid
@@ -26,7 +26,7 @@ def file_upload():
 
     if file.content_type == 'text/plain':
         return file.read().decode('utf-8')
-    elif file.content_type == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' or 'application/vnd.ms-excel':
+    elif file.content_type in ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel']:
         df = pd.read_excel(file)
         return df.to_html()
     else:
@@ -63,6 +63,17 @@ def convert_csv_two():
 def download_file(filename):
     return send_from_directory('downloads', filename, download_name='result.csv')
 
+
+@app.route('/handle_post', methods=['POST'])
+def handle_post():
+    greeting = request.json.get('greeting')
+    name = request.json.get('name')
+
+    with open('file.txt', 'w') as f:
+        f.write(f'{greeting} {name}')
+
+    return jsonify({'message': 'Successfully written'})
+            
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5555, debug=True)

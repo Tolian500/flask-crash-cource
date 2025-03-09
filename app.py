@@ -1,6 +1,7 @@
-from flask import Flask, request, make_response, render_template, Response
+from flask import Flask, request, make_response, render_template, Response, send_from_directory
 import pandas as pd
-
+import os
+import uuid
 
 
 app = Flask(__name__, template_folder='templates')
@@ -44,6 +45,24 @@ def convert_csv():
 
     )
     return response
+
+
+@app.route('/convert_csv_two', methods = ['POST'])
+def convert_csv_two():
+    file = request.files['file']
+    df = pd.read_excel(file)
+    if not os.path.exists('downloads'):
+        os.makedirs('downloads')
+
+    filename = f'{uuid.uuid4()}.csv'
+    df.to_csv(os.path.join('downloads', filename))
+    return render_template('download.html', filename=filename)
+
+
+@app.route('/download/<filename>')
+def download_file(filename):
+    return send_from_directory('downloads', filename, download_name='result.csv')
+
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5555, debug=True)

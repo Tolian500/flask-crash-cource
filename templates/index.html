@@ -5,22 +5,21 @@
 {% block content %}
 <h1>Index page</h1>
 
-    <ul>
-    {% for person in people %}
-        <li>
-            {{ person }}
-        </li>
-    {% endfor %}
+    {% if current_user.is_authenticated %}
+        <h3>
+            Hello {{ current_user.username}}
+        </h3>
 
-    </ul>
+    {% else %}
+        <h3>
+            Hello!
+        </h3>
+    {% endif %}
 
-    <h3>New person</h3>
+    <a href =" {{ url_for('signup') }}" >Sign up</a>
+    <a href =" {{ url_for('login') }}" >Login</a>
+    <a href =" {{ url_for('logout') }}" >Logout</a>
+    <a href =" {{ url_for('secret') }}" >Secret</a>
 
-    <form action="{{ url_for('index') }}" method="POST">
-        <input type="text" name="name" placeholder="name" required="required"><br>
-        <input type="number" name="age" placeholder="age"><br>
-        <input type="text" name="job" placeholder="job"><br>
-        <input type="submit" value="Create">
-    </form>
 
 {% endblock %}

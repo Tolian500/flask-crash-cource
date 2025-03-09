@@ -1,4 +1,4 @@
-from flask import Flask, request, make_response, render_template
+from flask import Flask, request, make_response, render_template, Response
 import pandas as pd
 
 
@@ -31,6 +31,19 @@ def file_upload():
     else:
         return "Invalid file type"
 
+
+@app.route('/convert_csv', methods = ['POST'])
+def convert_csv():
+    file = request.files['file']
+    df = pd.read_excel(file)
+
+    response = Response(
+        df.to_csv(index=False),
+        mimetype='text/csv',
+        headers={'Content-Disposition' : 'attachment; filename=result.csv' }
+
+    )
+    return response
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5555, debug=True)

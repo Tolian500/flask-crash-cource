@@ -1,31 +1,36 @@
 from flask import Flask, request, make_response, render_template
-
+import pandas as pd
 
 
 
 app = Flask(__name__, template_folder='templates')
 
 
-@app.route('/')
+@app.route('/',methods=['GET','POST'])
 def index():
-    myvalue = "NeuralNine"
-    myresauls = 10 + 20
-    mylist = [1, 3, 3, 5, 6]
+    if request.method == 'GET':
+        return render_template('index.html')
+    elif request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password'] 
 
-    return render_template('index.html', myvalue=myvalue, myresauls=myresauls, mylist=mylist)
+        if username == 'admin' and password == 'admin':
+            return 'Login successful'
+        else:
+            return 'Login failed'
 
-@app.route('/other')
-def other():
-    some_text = "hello text"
-    return render_template('other.html', some_text=some_text)
+@app.route('/file_upload', methods=['POST'])
+def file_upload():
+    file = request.files['file']
 
-@app.template_filter('reverse_filter')
-def reverse_filter(s):
-    return s[::-1]
+    if file.content_type == 'text/plain':
+        return file.read().decode('utf-8')
+    elif file.content_type == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' or 'application/vnd.ms-excel':
+        df = pd.read_excel(file)
+        return df.to_html()
+    else:
+        return "Invalid file type"
 
-@app.template_filter('repeat_filter')
-def repeat_filter(s, times=2):
-    return s * times
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5555, debug=True)

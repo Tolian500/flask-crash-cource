@@ -4,6 +4,9 @@
 
 {% block content %}
 <h1>Hello, World!</h1>
-<img src="/img/image.png" alt="Image">
+<p> {{ message }}</p>
+
+<a href="{{ url_for('set_data')}}">Set session data</a>
+<a href="{{ url_for('get_data')}}">Get session data</a>
 
 {% endblock %}
